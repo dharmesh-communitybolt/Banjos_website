@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import backgroundImage from "../../assets/img/conta.jpg";
 import { BASE_URL } from '../../config'; 
 
@@ -12,6 +12,50 @@ const Contact = () => {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [branches, setBranches] = useState([]);
+  const [mapLoading, setMapLoading] = useState(true);
+  const [selectedBranch, setSelectedBranch] = useState(null);
+
+  // Fetch branches data from API
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        setMapLoading(true);
+        const response = await fetch(`${BASE_URL}/branches/`);
+        if (response.ok) {
+          const data = await response.json();
+          setBranches(data);
+          // Set first branch as default
+          if (data.length > 0) {
+            setSelectedBranch(data[0]);
+          }
+        } else {
+          console.error("Failed to fetch branches");
+        }
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      } finally {
+        setMapLoading(false);
+      }
+    };
+
+    fetchBranches();
+  }, []);
+
+  // Generate Google Maps URL for selected branch
+  const generateMapUrl = (branch) => {
+    if (!branch) {
+      return "https://www.google.com/maps/d/u/0/embed?mid=1-ihulsNBqai5QC5sNQnqDmG994SvZdVR";
+    }
+
+    // Use the actual coordinates from API
+    if (branch.latitude && branch.longitude && branch.latitude > 0 && branch.longitude > 0) {
+      return `https://maps.google.com/maps?q=${branch.latitude},${branch.longitude}&z=15&output=embed`;
+    } else {
+      // Fallback to original map if coordinates are invalid
+      return "https://www.google.com/maps/d/u/0/embed?mid=1-ihulsNBqai5QC5sNQnqDmG994SvZdVR";
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,6 +64,10 @@ const Contact = () => {
 
   const handleFileChange = (e) => {
     setFormData((prev) => ({ ...prev, image: e.target.files[0] }));
+  };
+
+  const handleBranchSelect = (branch) => {
+    setSelectedBranch(branch);
   };
 
   const handleSubmit = async (e) => {
@@ -74,6 +122,17 @@ const Contact = () => {
         .dark-placeholder::placeholder {
           color: #100f0f;
           opacity: 1;
+        }
+        .branch-selector {
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .branch-selector:hover {
+          background-color: rgba(240, 231, 12, 0.2) !important;
+        }
+        .branch-selector.active {
+          background-color: rgba(240, 231, 12, 0.3) !important;
+          border-left: 4px solid #f0e70c !important;
         }
       `}</style>
 
@@ -201,15 +260,118 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Map */}
-      <div className="mt-5" style={{ position: 'relative', zIndex: 1 }}>
-        <iframe
-          title="Location Map"
-          style={{ width: "100%", height: "400px", border: 'none', borderRadius: '8px', boxShadow: '0 0 20px rgba(0, 0, 0, 0.2)' }}
-          src="https://www.google.com/maps/d/u/0/embed?mid=1-ihulsNBqai5QC5sNQnqDmG994SvZdVR"
-          allowFullScreen=""
-          loading="lazy"
-        ></iframe>
+      {/* Map Section with Branch Selection */}
+      <div className="container mt-5" style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ 
+          backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+          padding: '20px', 
+          borderRadius: '8px',
+          boxShadow: '0 0 20px rgba(0, 0, 0, 0.2)',
+          marginBottom: '20px'
+        }}>
+          <h3 style={{ color: '#333', textAlign: 'center', marginBottom: '20px' }}>
+            Our Branch Locations
+          </h3>
+          
+          {mapLoading ? (
+            <div style={{ 
+              height: '400px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              backgroundColor: '#f8f9fa',
+              borderRadius: '8px'
+            }}>
+              <div style={{ color: '#f0e70c', fontSize: '1.2rem' }}>
+                Loading branches...
+              </div>
+            </div>
+          ) : (
+            <div className="row">
+              {/* Branch Selection Sidebar */}
+              <div className="col-lg-4 mb-4">
+                <div style={{
+                  backgroundColor: '#f8f9fa',
+                  padding: '20px',
+                  borderRadius: '8px',
+                  height: '100%',
+                  border: '1px solid #dee2e6'
+                }}>
+                  <h5 style={{ color: '#333', marginBottom: '15px', textAlign: 'center' }}>
+                    Select a Branch ({branches.length})
+                  </h5>
+                  <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                    {branches.map((branch) => (
+                      <div 
+                        key={branch.id} 
+                        className={`branch-selector mb-3 p-3 ${selectedBranch?.id === branch.id ? 'active' : ''}`}
+                        style={{ 
+                          borderLeft: '3px solid #f0e70c', 
+                          backgroundColor: selectedBranch?.id === branch.id ? 'rgba(240, 231, 12, 0.3)' : 'rgba(240, 231, 12, 0.1)',
+                          borderRadius: '4px'
+                        }}
+                        onClick={() => handleBranchSelect(branch)}
+                      >
+                        <strong style={{ color: '#333', fontSize: '0.9rem' }}>{branch.name}</strong>
+                        <p style={{ color: '#555', fontSize: '0.8rem', margin: '5px 0' }}>
+                          {branch.address}
+                        </p>
+                        <p style={{ color: '#666', fontSize: '0.7rem', margin: '2px 0' }}>
+                          📞 {branch.phone_number}
+                        </p>
+                        <p style={{ color: '#666', fontSize: '0.7rem', margin: '2px 0' }}>
+                          🕒 {branch.opening_hours}
+                        </p>
+                        {branch.latitude && branch.longitude && (
+                          <p style={{ color: '#888', fontSize: '0.6rem', margin: '2px 0' }}>
+                            📍 {branch.latitude.toFixed(4)}, {branch.longitude.toFixed(4)}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Map */}
+              <div className="col-lg-8">
+                {selectedBranch && (
+                  <div style={{ marginBottom: '15px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+                    <h5 style={{ color: '#333', marginBottom: '8px' }}>{selectedBranch.name}</h5>
+                    <p style={{ color: '#555', margin: '2px 0', fontSize: '0.9rem' }}>
+                      <strong>Address:</strong> {selectedBranch.address}
+                    </p>
+                    <p style={{ color: '#555', margin: '2px 0', fontSize: '0.9rem' }}>
+                      <strong>Phone:</strong> {selectedBranch.phone_number}
+                    </p>
+                    <p style={{ color: '#555', margin: '2px 0', fontSize: '0.9rem' }}>
+                      <strong>Hours:</strong> {selectedBranch.opening_hours}
+                    </p>
+                    {selectedBranch.manager_name && (
+                      <p style={{ color: '#555', margin: '2px 0', fontSize: '0.9rem' }}>
+                        <strong>Manager:</strong> {selectedBranch.manager_name}
+                      </p>
+                    )}
+                  </div>
+                )}
+                
+                <iframe
+                  title="Branch Location Map"
+                  style={{ 
+                    width: "100%", 
+                    height: "400px", 
+                    border: 'none', 
+                    borderRadius: '8px' 
+                  }}
+                  src={generateMapUrl(selectedBranch)}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

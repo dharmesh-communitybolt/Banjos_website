@@ -140,10 +140,10 @@ const Footer = () => {
           <div style={styles.footerCol}>
             <h4 style={styles.footerHeading}>Follow Us</h4>
             <div style={styles.socialLinks}>
-              <a href="/" style={styles.socialLink}><FaTwitter /></a>
-              <a href="/" style={styles.socialLink}><FaFacebook /></a>
-              <a href="/" style={styles.socialLink}><FaInstagram /></a>
-              <a href="/" style={styles.socialLink}><FaLinkedin /></a>
+              <a href="https://www.instagram.com/banjos_india?igsh=MTNvNjViYWF6dnFxdA==" target="_blank" style={styles.socialLink}><FaInstagram /></a>
+              <a href="https://www.facebook.com/share/1CC7taudBt/" target="_blank" style={styles.socialLink}><FaFacebook /></a>
+              <a href="/" target="_blank" style={styles.socialLink}><FaTwitter /></a>
+              <a href="https://www.linkedin.com/company/71628004/admin/dashboard/" target="_blank" style={styles.socialLink}><FaLinkedin /></a>
             </div>
           </div>
         </div>

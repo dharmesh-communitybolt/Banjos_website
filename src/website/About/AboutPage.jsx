@@ -157,7 +157,7 @@ const AboutUs = () => {
                   </RotatingItem>
                 ))}
                 <ExperienceBadge>
-                  <ExperienceYears>12+</ExperienceYears>
+                  <ExperienceYears>10+</ExperienceYears>
                   <ExperienceText>Years Experience</ExperienceText>
                 </ExperienceBadge>
               </ImageContainer>
