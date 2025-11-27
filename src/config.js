@@ -1,2 +1,2 @@
 
-export const BASE_URL = process.env.REACT_APP_BASE_URL || "http://64.227.163.17:8000";
+export const BASE_URL = process.env.REACT_APP_BASE_URL || "https://api.banjosthefoodchain.com";

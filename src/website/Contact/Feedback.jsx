@@ -37,7 +37,7 @@ const Feedback = () => {
 
     try {
       // Send form data to the API
-      const response = await fetch('http://64.227.163.17:8000/submit-feedback', {
+      const response = await fetch('https://api.banjosthefoodchain.com/submit-feedback', {
 
         method: 'POST',
         headers: {

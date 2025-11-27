@@ -62,7 +62,7 @@ const Login = () => {
       axios.defaults.headers.common['X-CSRF-Token'] = response.data.csrf_token;
 
       // Get user details after successful login
-      const userResponse = await axios.get('http://64.227.163.17:8000/users/me');
+      const userResponse = await axios.get('https://api.banjosthefoodchain.com/users/me');
       const user = userResponse.data;
 
       // Store user data
