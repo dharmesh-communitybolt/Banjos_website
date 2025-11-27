@@ -15,12 +15,9 @@ const MenuPage = () => {
       try {
         setLoading(true);
         setError(null);
-        
-        // Fetch both categories and all menu items in parallel
-        const [categoriesResponse, menuResponse] = await Promise.all([
-          fetch(`${BASE_URL}/categories/`),
-          fetch(`${BASE_URL}/menu`)
-        ]);
+
+        const categoriesResponse = await fetch(`${BASE_URL}/categories/`);
+        const menuResponse = await fetch(`${BASE_URL}/menu/`);
 
         if (!categoriesResponse.ok) throw new Error('Failed to fetch categories');
         if (!menuResponse.ok) throw new Error('Failed to fetch menu items');

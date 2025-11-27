@@ -27,7 +27,7 @@ const AppHeaderDropdown = () => {
     const fetchUserProfile = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://127.0.0.1:8000/users/me', {
+        const response = await axios.get('https://api.banjosthefoodchain.com/users/me', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
             'X-CSRF-Token': localStorage.getItem('csrf_token')
@@ -41,7 +41,7 @@ const AppHeaderDropdown = () => {
           // Token expired, try to refresh
           try {
             const refreshResponse = await axios.post(
-              'http://127.0.0.1:8000/users/refresh-token',
+              'https://api.banjosthefoodchain.com/users/refresh-token',
               {},
               {
                 headers: {
@@ -56,7 +56,7 @@ const AppHeaderDropdown = () => {
             axios.defaults.headers.common['X-CSRF-Token'] = refreshResponse.data.csrf_token;
 
             // Retry the original request
-            const retryResponse = await axios.get('http://127.0.0.1:8000/users/me');
+            const retryResponse = await axios.get('https://api.banjosthefoodchain.com/users/me');
             setUser(retryResponse.data);
           } catch (refreshError) {
             console.error('Refresh token failed:', refreshError);
@@ -77,7 +77,7 @@ const AppHeaderDropdown = () => {
     try {
       setLoading(true);
       await axios.post(
-        'http://127.0.0.1:8000/users/logout',
+        'https://api.banjosthefoodchain.com/users/logout',
         {},
         {
           headers: {

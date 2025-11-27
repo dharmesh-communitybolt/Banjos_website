@@ -51,7 +51,7 @@ const Login = () => {
  
     try {
       const response = await axios.post(
-        'http://139.59.51.83:8000/users/login',
+        'https://api.banjosthefoodchain.com/users/login',
         { email, password },
         {
           headers: {
@@ -68,7 +68,7 @@ const Login = () => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
       axios.defaults.headers.common['X-CSRF-Token'] = response.data.csrf_token;
  
-      const userResponse = await axios.get('http://139.59.51.83:8000/users/me');
+      const userResponse = await axios.get('https://api.banjosthefoodchain.com/users/me');
       const user = userResponse.data;
  
       localStorage.setItem('user', JSON.stringify(user));

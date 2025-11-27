@@ -90,7 +90,7 @@ const MenuManagement = () => {
   // Fetch categories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/categories`);
+      const response = await axios.get(`${BASE_URL}/categories/`);
       setCategories(response.data);
     } catch (err) {
       console.error('Failed to fetch categories:', err);

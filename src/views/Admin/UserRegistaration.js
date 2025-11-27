@@ -72,7 +72,7 @@ const UserRegistration = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BASE_URL}/users`, {
+      const response = await axios.get(`${BASE_URL}/users/`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'X-CSRF-Token': localStorage.getItem('csrf_token')

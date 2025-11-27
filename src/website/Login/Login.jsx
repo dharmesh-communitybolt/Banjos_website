@@ -40,7 +40,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        'http://139.59.51.83:8000/users/login',
+        'https://api.banjosthefoodchain.com/users/login',
         { email, password },
         {
           headers: {

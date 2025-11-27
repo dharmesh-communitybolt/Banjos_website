@@ -59,7 +59,7 @@ const CategoriesManagement = () => {
   const fetchCategories = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/categories`);
+      const response = await axios.get(`${BASE_URL}/categories/`);
       setCategories(response.data);
       setError('');
     } catch (err) {
@@ -91,7 +91,7 @@ const CategoriesManagement = () => {
     setError('');
     setSuccess('');
     try {
-      const response = await axios.post(`${BASE_URL}/categories`, formData);
+      const response = await axios.post(`${BASE_URL}/categories/`, formData);
       if (response.status === 200) {
         fetchCategories();
         setModalVisible(false);

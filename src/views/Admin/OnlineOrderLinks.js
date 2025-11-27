@@ -112,7 +112,7 @@ const OnlineOrderLinks = () => {
 
   const fetchBranches = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/branches`);
+      const response = await axios.get(`${BASE_URL}/branches/`);
       setBranches(response.data);
     } catch (err) {
       console.error('Failed to fetch branches:', err);
