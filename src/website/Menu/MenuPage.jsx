@@ -17,7 +17,7 @@ const MenuPage = () => {
         setError(null);
 
         const categoriesResponse = await fetch(`${BASE_URL}/categories/`);
-        const menuResponse = await fetch(`${BASE_URL}/menu/`);
+        const menuResponse = await fetch(`${BASE_URL}/menu`);
 
         if (!categoriesResponse.ok) throw new Error('Failed to fetch categories');
         if (!menuResponse.ok) throw new Error('Failed to fetch menu items');
